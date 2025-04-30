@@ -1,0 +1,132 @@
+XML File:
+
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/playPauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
+
+
+JAVA File:
+
+package com.example.myapplication;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.media.MediaPlayer;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private MediaPlayer mediaPlayer;
+    private Button playPauseButton;
+    private boolean isPlaying = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        playPauseButton = findViewById(R.id.playPauseButton);
+
+        // Initialize media player with an audio resource or URL
+        mediaPlayer = MediaPlayer.create(this, R.raw.sample_audio); // Use a local file from res/raw
+
+        // If you're using a URL instead of a local file, use:
+        // mediaPlayer = new MediaPlayer();
+        // mediaPlayer.setDataSource("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+        // mediaPlayer.prepareAsync();  // for streaming
+
+        // Play/Pause functionality
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPlaying) {
+                    mediaPlayer.pause();
+                    playPauseButton.setText("Play");
+                    isPlaying = false;
+                } else {
+                    mediaPlayer.start();
+                    playPauseButton.setText("Pause");
+                    isPlaying = true;
+                }
+            }
+        });
+
+        // Handle completion of the media playback
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playPauseButton.setText("Play");
+                isPlaying = false;
+                Toast.makeText(MainActivity.this, "Playback Finished", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Release resources when the activity is paused
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Ensure media player is released when the activity is stopped
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+    }
+}
+
+
+
+Manifest XML File:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApplication"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
