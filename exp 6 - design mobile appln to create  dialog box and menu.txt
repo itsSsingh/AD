@@ -33,6 +33,7 @@ XML File:
         android:background="#e0e0e0" />
 </LinearLayout>
 
+
 Java File:
 package com.example.myapplication;
 
@@ -148,9 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-
 Menu.XML File:
-
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -167,4 +166,5 @@ Menu.XML File:
         android:icon="@android:drawable/ic_menu_help"
         app:showAsAction="ifRoom" />
 </menu>
+
 
